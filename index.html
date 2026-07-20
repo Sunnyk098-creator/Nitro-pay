@@ -11,7 +11,7 @@
             --primary: #19c37d;
             --secondary: #39d98a;
             --bg: #effff5;
-            --card-bg: rgba(255, 255, 255, 0.25);
+            --card-bg: rgba(255, 255, 255, 0.4);
             --glow: rgba(25, 195, 125, 0.35);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
@@ -20,24 +20,22 @@
         /* Glassmorphism & Effects */
         .glass {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
             border-radius: 20px;
         }
-        .glow { box-shadow: 0 0 20px var(--glow); }
-        .floating { animation: float 6s ease-in-out infinite; }
+        .glow { box-shadow: 0 0 25px var(--glow); }
+        .floating { animation: float 5s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
         
-        .shine {
-            position: relative; overflow: hidden;
-        }
+        .shine { position: relative; overflow: hidden; }
         .shine::after {
             content: ''; position: absolute; top: -50%; left: -50%;
             width: 200%; height: 200%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-            transform: rotate(30deg); animation: shine 4s infinite linear;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(30deg); animation: shine 3s infinite linear;
         }
         @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
 
@@ -47,57 +45,58 @@
         .view.active { display: block; opacity: 1; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Typography & Forms */
         h1, h2, h3 { color: #111; }
         .text-primary { color: var(--primary); }
         input { 
-            width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5);
-            outline: none; transition: 0.3s;
+            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px;
+            border: 1px solid rgba(25,195,125,0.2); background: rgba(255,255,255,0.8);
+            outline: none; transition: 0.3s; font-size: 14px;
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 8px var(--glow); }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--glow); }
         
         .btn {
-            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white; font-weight: 600; cursor: pointer; transition: 0.3s;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
+            display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 15px;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--glow); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--glow); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; }
 
-        /* Dashboard Specifics */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .balance-card { padding: 30px 20px; text-align: center; color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); position: relative; overflow: hidden; margin-bottom: 25px; border-radius: 20px; }
-        .balance-card h2 { color: white; font-size: 36px; margin: 10px 0; }
-        .live-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        /* Dashboard */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .balance-card { padding: 30px 20px; text-align: center; color: white; background: linear-gradient(135deg, var(--primary), #209c69); position: relative; overflow: hidden; margin-bottom: 25px; border-radius: 20px; }
+        .balance-card h2 { color: white; font-size: 40px; margin: 5px 0; }
+        .live-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
         .live-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.3; } }
 
-        .action-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; text-align: center; }
-        .action-btn { background: var(--card-bg); padding: 15px 5px; border-radius: 15px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 500; }
-        .action-btn i { font-size: 20px; color: var(--primary); margin-bottom: 8px; display: block; }
-        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .action-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; text-align: center; }
+        .action-btn { background: var(--card-bg); padding: 18px 5px; border-radius: 15px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 600; border: 1px solid rgba(25,195,125,0.1); }
+        .action-btn i { font-size: 22px; color: var(--primary); margin-bottom: 8px; display: block; }
+        .action-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(25,195,125,0.15); background: #fff; }
 
         .transaction-list { display: flex; flex-direction: column; gap: 12px; }
-        .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 15px; }
+        .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 15px; background: #fff; border: 1px solid rgba(25,195,125,0.1); }
         .tx-left { display: flex; align-items: center; gap: 12px; }
-        .tx-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(25,193,125,0.1); }
+        .tx-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(25,193,125,0.1); font-size: 18px; }
         .tx-credit .tx-icon { color: var(--primary); }
         .tx-debit .tx-icon { background: rgba(255,75,75,0.1); color: #ff4b4b; }
-        .tx-amount.credit { color: var(--primary); font-weight: 600; }
-        .tx-amount.debit { color: #ff4b4b; font-weight: 600; }
+        .tx-amount.credit { color: var(--primary); font-weight: 700; }
+        .tx-amount.debit { color: #ff4b4b; font-weight: 700; }
 
         /* Utilities */
-        .copy-btn { margin-left: 10px; cursor: pointer; color: var(--primary); padding: 5px; border-radius: 5px; background: rgba(25,195,125,0.1); transition: 0.3s; }
-        .copy-btn:hover { background: var(--primary); color: white; }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1000; }
+        .copy-btn { margin-left: 8px; cursor: pointer; color: #fff; padding: 6px; border-radius: 8px; background: rgba(255,255,255,0.25); transition: 0.3s; font-size: 12px; }
+        .copy-btn:hover { background: #fff; color: var(--primary); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 12px 25px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
         
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 22px; height: 22px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .back-btn { margin-bottom: 20px; cursor: pointer; color: #555; display: inline-flex; align-items: center; gap: 5px; }
+        .back-btn { margin-bottom: 20px; cursor: pointer; color: #555; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 15px; background: var(--card-bg); border-radius: 12px; width: fit-content; }
+        .api-url-box { background: rgba(0,0,0,0.8); color: #4af626; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 11px; word-break: break-all; margin: 15px 0; text-align: left; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -107,21 +106,23 @@
         <!-- LOGIN VIEW -->
         <div id="login-view" class="view active">
             <br><br><br>
-            <div class="glass" style="padding: 30px;">
+            <div class="glass" style="padding: 35px 25px;">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <i class="fa-solid fa-wallet text-primary" style="font-size: 40px; margin-bottom: 10px;"></i>
-                    <h2>Welcome Back</h2>
-                    <p style="color: #666; font-size: 14px;">Log in to Nitro Pay</p>
+                    <div class="glow" style="width: 70px; height: 70px; background: var(--primary); border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <i class="fa-solid fa-wallet" style="font-size: 35px; color: white;"></i>
+                    </div>
+                    <h2>Nitro Pay</h2>
+                    <p style="color: #666; font-size: 14px; margin-top: 5px;">Secure Digital Wallet</p>
                 </div>
                 <form id="login-form">
                     <input type="text" id="login-id" placeholder="Email or Phone Number" required>
                     <input type="password" id="login-pass" placeholder="Password" required>
                     <button type="submit" class="btn">
-                        <span class="btn-text">Login</span>
+                        <span class="btn-text">Log In</span>
                         <div class="loader" id="login-loader"></div>
                     </button>
                 </form>
-                <div style="text-align: center; margin-top: 20px; font-size: 14px;">
+                <div style="text-align: center; margin-top: 25px; font-size: 14px;">
                     Don't have an account? <a href="#" onclick="switchView('signup-view')" class="text-primary" style="text-decoration: none; font-weight: 600;">Sign Up</a>
                 </div>
             </div>
@@ -130,9 +131,10 @@
         <!-- SIGNUP VIEW -->
         <div id="signup-view" class="view">
             <br>
-            <div class="glass" style="padding: 30px;">
-                <div style="text-align: center; margin-bottom: 20px;">
+            <div class="glass" style="padding: 35px 25px;">
+                <div style="text-align: center; margin-bottom: 25px;">
                     <h2>Create Account</h2>
+                    <p style="color: #666; font-size: 13px;">Join the future of fintech</p>
                 </div>
                 <form id="signup-form">
                     <input type="text" id="reg-name" placeholder="Full Name" required>
@@ -140,9 +142,9 @@
                     <input type="tel" id="reg-phone" placeholder="Phone Number" required>
                     <input type="text" id="reg-telegram" placeholder="Telegram User ID" required>
                     <input type="password" id="reg-pass" placeholder="Password (Min 8 chars)" minlength="8" required>
-                    <input type="password" id="reg-pin" placeholder="4-Digit PIN" pattern="\d{4}" maxlength="4" required>
+                    <input type="password" id="reg-pin" placeholder="Set 4-Digit PIN" pattern="\d{4}" maxlength="4" required>
                     <button type="submit" class="btn">
-                        <span class="btn-text">Sign Up</span>
+                        <span class="btn-text">Sign Up Securely</span>
                         <div class="loader" id="signup-loader"></div>
                     </button>
                 </form>
@@ -156,42 +158,42 @@
         <div id="dashboard-view" class="view">
             <div class="header">
                 <div>
-                    <p style="font-size: 14px; color: #666;">Welcome back,</p>
-                    <h3 id="dash-name">Loading...</h3>
+                    <p style="font-size: 14px; color: #666; font-weight: 500;">Hello,</p>
+                    <h3 id="dash-name" style="font-size: 22px;">Loading...</h3>
                 </div>
-                <div class="glass" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer;" onclick="logout()">
-                    <i class="fa-solid fa-right-from-bracket text-primary"></i>
+                <div class="glass" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer;" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket text-primary" style="font-size: 18px;"></i>
                 </div>
             </div>
 
             <div class="balance-card floating shine glow">
-                <div class="live-badge"><div class="live-dot"></div> LIVE</div>
-                <p style="opacity: 0.9; font-size: 14px;">Total Balance</p>
+                <div class="live-badge"><div class="live-dot"></div> LIVE SECURE</div>
+                <p style="opacity: 0.9; font-size: 14px; margin-top: 15px;">Available Balance</p>
                 <h2 id="dash-balance">$0.00</h2>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
-                    <span style="font-size: 12px; opacity: 0.9;" id="dash-wallet">W----------</span>
-                    <i class="fa-solid fa-copy copy-btn" style="color: white; background: rgba(255,255,255,0.2);" onclick="copyToClipboard(document.getElementById('dash-wallet').innerText)"></i>
+                <div style="display: inline-flex; justify-content: center; align-items: center; gap: 10px; margin-top: 5px; background: rgba(0,0,0,0.15); padding: 5px 15px; border-radius: 20px;">
+                    <span style="font-size: 13px; font-family: monospace; letter-spacing: 1px;" id="dash-wallet">W----------</span>
+                    <i class="fa-solid fa-copy copy-btn" onclick="copyToClipboard(document.getElementById('dash-wallet').innerText)"></i>
                 </div>
             </div>
 
             <div class="action-row">
-                <div class="glass action-btn" onclick="switchView('add-fund-view')">
+                <div class="action-btn" onclick="switchView('add-fund-view')">
                     <i class="fa-solid fa-circle-plus"></i> Add Fund
                 </div>
-                <div class="glass action-btn" onclick="switchView('send-view')">
+                <div class="action-btn" onclick="switchView('send-view')">
                     <i class="fa-solid fa-paper-plane"></i> Send
                 </div>
-                <div class="glass action-btn" onclick="switchView('payment-key-view')">
+                <div class="action-btn" onclick="switchView('payment-key-view')">
                     <i class="fa-solid fa-key"></i> Pay Key
                 </div>
-                <div class="glass action-btn" onclick="switchView('withdraw-view')">
+                <div class="action-btn" onclick="switchView('withdraw-view')">
                     <i class="fa-solid fa-building-columns"></i> Withdraw
                 </div>
             </div>
 
-            <h3 style="margin-bottom: 15px; font-size: 16px;">Recent Transactions</h3>
+            <h3 style="margin-bottom: 15px; font-size: 18px;">Recent Transactions</h3>
             <div class="transaction-list" id="dash-tx-list">
-                <!-- Injected via JS -->
+                <!-- Transactions Injected via JS -->
             </div>
         </div>
 
@@ -199,10 +201,18 @@
         <div id="add-fund-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
             <div class="glass" style="padding: 30px; text-align: center;">
-                <i class="fa-brands fa-telegram text-primary" style="font-size: 50px; margin-bottom: 15px;"></i>
+                <i class="fa-brands fa-telegram text-primary floating" style="font-size: 55px; margin-bottom: 20px;"></i>
                 <h3>Add Funds via Bot</h3>
-                <p style="font-size: 14px; color: #666; margin: 15px 0;">To add funds securely, please use our official Telegram bot. Ensure you have your Wallet Number ready.</p>
-                <button class="btn" onclick="window.open('https://t.me/YOUR_BOT_USERNAME', '_blank')">
+                <p style="font-size: 13px; color: #555; margin: 15px 0;">Use the Telegram bot to add funds. Set this Webhook URL in your bot (Replaced automatically with your domain):</p>
+                
+                <div class="api-url-box">
+                    <span id="webhook-url-display">https://your-domain.vercel.app/api/backend?action=addfund&wallet={wallet}&amount={amount}&key={password}</span>
+                </div>
+                
+                <button class="btn" onclick="copyToClipboard(document.getElementById('webhook-url-display').innerText)" style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-copy"></i> Copy API Link
+                </button>
+                <button class="btn btn-outline" onclick="window.open('https://t.me/Nitro_Pay_r0Bot', '_blank')">
                     <i class="fa-brands fa-telegram"></i> Open Telegram Bot
                 </button>
             </div>
@@ -212,13 +222,13 @@
         <div id="send-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
             <div class="glass" style="padding: 30px;">
-                <h3 style="margin-bottom: 20px;">Send Money</h3>
+                <h3 style="margin-bottom: 20px; font-size: 22px;">Send Money</h3>
                 <form id="send-form">
-                    <input type="text" id="send-wallet" placeholder="Receiver Wallet ID" required>
+                    <input type="text" id="send-wallet" placeholder="Receiver Wallet ID (e.g. W123ABC)" required>
                     <input type="number" id="send-amount" placeholder="Amount ($)" step="0.01" required>
-                    <input type="text" id="send-comment" placeholder="Comment (Optional)">
+                    <input type="text" id="send-comment" placeholder="Comment / Note (Optional)">
                     <input type="password" id="send-pin" placeholder="Enter 4-Digit PIN to Confirm" pattern="\d{4}" maxlength="4" required>
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn" style="margin-top: 10px;">
                         <span class="btn-text">Send Securely</span>
                         <div class="loader" id="send-loader"></div>
                     </button>
@@ -229,18 +239,19 @@
         <!-- PAYMENT KEY VIEW -->
         <div id="payment-key-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
-            <div class="glass" style="padding: 30px; text-align: center;">
-                <i class="fa-solid fa-shield-halved text-primary" style="font-size: 50px; margin-bottom: 15px;"></i>
-                <h3>Your Payment Key</h3>
-                <p style="font-size: 12px; color: #666; margin-bottom: 20px;">Keep this key secret. It is used for API integrations.</p>
+            <div class="glass" style="padding: 35px 25px; text-align: center;">
+                <i class="fa-solid fa-shield-halved text-primary glow" style="font-size: 55px; margin-bottom: 20px; border-radius: 50%;"></i>
+                <h3>API Payment Key</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 25px;">Keep this secret. It is used as the password parameter for bot integrations.</p>
                 
-                <div class="glass" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; background: rgba(25,195,125,0.05);">
-                    <h2 id="pk-display" style="letter-spacing: 2px;">----------</h2>
-                    <i class="fa-solid fa-copy copy-btn" onclick="copyToClipboard(document.getElementById('pk-display').innerText)"></i>
+                <div style="background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--primary); display: flex; justify-content: center; align-items: center; gap: 15px;">
+                    <h2 id="pk-display" style="letter-spacing: 3px; font-family: monospace; font-size: 24px; color: #111;">----------</h2>
+                    <i class="fa-solid fa-copy copy-btn" style="color: var(--primary); background: rgba(25,195,125,0.15);" onclick="copyToClipboard(document.getElementById('pk-display').innerText)"></i>
                 </div>
 
                 <button class="btn btn-outline" onclick="regenerateKey()" id="regen-btn">
-                    <i class="fa-solid fa-arrows-rotate"></i> Regenerate Key
+                    <span class="btn-text"><i class="fa-solid fa-arrows-rotate"></i> Regenerate Key</span>
+                    <div class="loader" id="regen-loader" style="border-top-color: var(--primary);"></div>
                 </button>
             </div>
         </div>
@@ -248,10 +259,10 @@
         <!-- WITHDRAW VIEW -->
         <div id="withdraw-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
-            <div class="glass" style="padding: 40px 20px; text-align: center; background: linear-gradient(135deg, rgba(25,195,125,0.1), rgba(57,217,138,0.2)); border: 1px solid var(--primary);">
-                <i class="fa-solid fa-hourglass-half text-primary floating" style="font-size: 50px; margin-bottom: 20px;"></i>
+            <div class="glass" style="padding: 50px 20px; text-align: center; background: linear-gradient(135deg, rgba(25,195,125,0.05), rgba(57,217,138,0.1)); border: 1px solid var(--primary);">
+                <i class="fa-solid fa-hourglass-half text-primary floating" style="font-size: 55px; margin-bottom: 25px;"></i>
                 <h2 class="text-primary">Coming Soon</h2>
-                <p style="font-size: 14px; color: #555; margin-top: 10px;">Direct bank withdrawals are currently undergoing security auditing. Check back later!</p>
+                <p style="font-size: 14px; color: #555; margin-top: 15px; line-height: 1.6;">Direct bank withdrawals are currently undergoing security audits to ensure maximum safety. Check back later!</p>
             </div>
         </div>
 
@@ -260,7 +271,10 @@
     <div class="toast" id="toast">Copied Successfully</div>
 
     <script>
-        const API_BASE = '/api';
+        // CRITICAL FIX: All API requests route exactly to `/api/backend` with a query parameter.
+        // This stops Vercel from searching for non-existent files and returning a 404 HTML page (which caused the 'Unexpected token T' error).
+        const API_BASE = '/api/backend';
+        
         let currentUser = null;
 
         // UI Utils
@@ -268,6 +282,10 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             if(viewId === 'dashboard-view') fetchUserData();
+            if(viewId === 'add-fund-view') {
+                const url = window.location.origin + '/api/backend?action=addfund&wallet={walletNumber}&amount={amount}&key={password}';
+                document.getElementById('webhook-url-display').innerText = url;
+            }
         }
 
         function showToast(msg) {
@@ -288,14 +306,22 @@
             else { loader.style.display = 'none'; text.style.display = 'block'; }
         }
 
-        // Auth Fetch Wrapper
-        async function apiFetch(endpoint, options = {}) {
+        // Secure Fetch Wrapper
+        async function apiFetch(action, options = {}) {
             const token = localStorage.getItem('nitro_token');
             const headers = { 'Content-Type': 'application/json', ...options.headers };
             if (token) headers['Authorization'] = `Bearer ${token}`;
             
-            const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-            const data = await res.json();
+            // Route dynamically via ?action= to bypass Vercel subfolder strictness
+            const res = await fetch(`${API_BASE}?action=${action}`, { ...options, headers });
+            
+            // Safely parse JSON to catch any remaining server errors gracefully
+            let data;
+            try {
+                data = await res.json();
+            } catch (err) {
+                throw new Error("Server communication error. Please try again.");
+            }
             
             if (res.status === 401 || res.status === 403) {
                 localStorage.removeItem('nitro_token');
@@ -311,7 +337,7 @@
             e.preventDefault();
             toggleLoader('login-loader', true);
             try {
-                const data = await apiFetch('/login', {
+                const data = await apiFetch('login', {
                     method: 'POST',
                     body: JSON.stringify({
                         identifier: document.getElementById('login-id').value,
@@ -319,6 +345,7 @@
                     })
                 });
                 localStorage.setItem('nitro_token', data.token);
+                document.getElementById('login-form').reset();
                 switchView('dashboard-view');
             } catch (err) {
                 alert(err.message);
@@ -330,7 +357,7 @@
             e.preventDefault();
             toggleLoader('signup-loader', true);
             try {
-                await apiFetch('/signup', {
+                await apiFetch('signup', {
                     method: 'POST',
                     body: JSON.stringify({
                         fullName: document.getElementById('reg-name').value,
@@ -341,7 +368,8 @@
                         pin: document.getElementById('reg-pin').value
                     })
                 });
-                alert('Account created successfully! Please login.');
+                alert('Account created successfully! Please log in.');
+                document.getElementById('signup-form').reset();
                 switchView('login-view');
             } catch (err) {
                 alert(err.message);
@@ -351,7 +379,7 @@
 
         async function fetchUserData() {
             try {
-                const data = await apiFetch('/me');
+                const data = await apiFetch('me', { method: 'GET' });
                 currentUser = data.user;
                 document.getElementById('dash-name').innerText = currentUser.name;
                 document.getElementById('dash-balance').innerText = `$${parseFloat(currentUser.balance).toFixed(2)}`;
@@ -366,12 +394,12 @@
                     txs.forEach(tx => {
                         const isCredit = tx.type === 'credit';
                         txList.innerHTML += `
-                            <div class="glass tx-item">
+                            <div class="tx-item">
                                 <div class="tx-left tx-${tx.type}">
                                     <div class="tx-icon"><i class="fa-solid fa-arrow-${isCredit ? 'down' : 'up'}"></i></div>
                                     <div>
-                                        <p style="font-size: 14px; font-weight: 600;">${tx.comment}</p>
-                                        <p style="font-size: 11px; color: #888;">${new Date(tx.time).toLocaleDateString()}</p>
+                                        <p style="font-size: 14px; font-weight: 600; color: #222;">${tx.comment}</p>
+                                        <p style="font-size: 12px; color: #888; margin-top: 2px;">${new Date(tx.time).toLocaleString()}</p>
                                     </div>
                                 </div>
                                 <div class="tx-amount ${tx.type}">${isCredit ? '+' : '-'}$${parseFloat(tx.amount).toFixed(2)}</div>
@@ -388,10 +416,10 @@
             e.preventDefault();
             toggleLoader('send-loader', true);
             try {
-                await apiFetch('/send', {
+                await apiFetch('send', {
                     method: 'POST',
                     body: JSON.stringify({
-                        receiverWallet: document.getElementById('send-wallet').value,
+                        receiverWallet: document.getElementById('send-wallet').value.trim(),
                         amount: document.getElementById('send-amount').value,
                         comment: document.getElementById('send-comment').value,
                         pin: document.getElementById('send-pin').value
@@ -407,17 +435,16 @@
         });
 
         async function regenerateKey() {
-            if(!confirm("Are you sure? Old integrations will break.")) return;
-            const btn = document.getElementById('regen-btn');
-            btn.style.opacity = '0.5';
+            if(!confirm("Are you sure? Old bot integrations using the current key will stop working.")) return;
+            toggleLoader('regen-loader', true);
             try {
-                const data = await apiFetch('/paymentkey/regenerate', { method: 'POST' });
+                const data = await apiFetch('regenerate', { method: 'POST' });
                 document.getElementById('pk-display').innerText = data.paymentKey;
-                showToast("Key Regenerated");
+                showToast("Key Regenerated Successfully");
             } catch (err) {
                 alert(err.message);
             }
-            btn.style.opacity = '1';
+            toggleLoader('regen-loader', false);
         }
 
         function logout() {
@@ -425,7 +452,7 @@
             switchView('login-view');
         }
 
-        // Init Check
+        // Init App Check
         window.onload = () => {
             if(localStorage.getItem('nitro_token')) {
                 switchView('dashboard-view');
