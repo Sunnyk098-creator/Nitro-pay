@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Connect to Firebase using Vercel Environment Variables
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -36,6 +35,11 @@ const generateId = (length) => {
     return result;
 };
 
+// IP Address nikalne ka function (Vercel ke liye)
+const getClientIp = (req) => {
+    return req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+};
+
 app.all('/api/backend', async (req, res) => {
     const action = req.query.action;
 
@@ -51,10 +55,31 @@ app.all('/api/backend', async (req, res) => {
     };
 
     try {
-        // ---------------------------------------------------------
-        // 1. SIGN UP (Fix: No Bonus, Phone Number = Wallet)
-        // ---------------------------------------------------------
-        if (action === 'signup' && req.method === 'POST') {
+        const clientIp = getClientIp(req);
+
+        // --- IP AUTO-LOGIN ---
+        if (action === 'autologin' && req.method === 'GET') {
+            if (!clientIp) return res.status(400).json({ success: false });
+
+            const snapshot = await get(ref(db, 'users'));
+            let foundUser = null;
+
+            if (snapshot.exists()) {
+                snapshot.forEach((c) => {
+                    if (c.val().ipAddress === clientIp) foundUser = c.val();
+                });
+            }
+
+            if (foundUser) {
+                // Generate 1 Year permanent token
+                const token = jwt.sign({ uid: foundUser.uid, walletNumber: foundUser.walletNumber }, JWT_SECRET, { expiresIn: '365d' });
+                return res.json({ success: true, token, user: foundUser });
+            }
+            return res.status(404).json({ success: false, error: "IP not registered" });
+        }
+
+        // --- SIGN UP ---
+        else if (action === 'signup' && req.method === 'POST') {
             const { fullName, email, phone, telegramId, password, pin } = req.body;
             
             if (!fullName || !email || !phone || !telegramId || !password || !pin) {
@@ -77,15 +102,14 @@ app.all('/api/backend', async (req, res) => {
             const uid = push(child(ref(db), 'users')).key;
             const passwordHash = await bcrypt.hash(password, 12);
             const pinHash = await bcrypt.hash(pin, 12);
-            
-            // WALLET NUMBER = PHONE NUMBER
             const walletNumber = phone; 
             const paymentKey = generateId(10);
 
-            // NO SIGNUP BONUS TRANSACTIONS HERE
             const newUser = {
                 uid, name: fullName, email, phone, telegramId, walletNumber,
-                balance: 0, // EXACTLY ZERO
+                balance: 0, 
+                holdBalance: 0, // NEW: HOLD BALANCE ADDED
+                ipAddress: clientIp, // NEW: SAVE USER IP
                 pinHash, passwordHash, paymentKey,
                 createdAt: Date.now()
             };
@@ -94,18 +118,19 @@ app.all('/api/backend', async (req, res) => {
             return res.json({ success: true, message: "Account created successfully" });
         }
 
-        // ---------------------------------------------------------
-        // 2. LOGIN
-        // ---------------------------------------------------------
+        // --- LOGIN ---
         else if (action === 'login' && req.method === 'POST') {
             const { identifier, password } = req.body;
             const snapshot = await get(ref(db, 'users'));
             let foundUser = null;
+            let foundUid = null;
 
             if (snapshot.exists()) {
                 snapshot.forEach((c) => {
                     const u = c.val();
-                    if (u.email === identifier || u.phone === identifier) foundUser = u;
+                    if (u.email === identifier || u.phone === identifier) {
+                        foundUser = u; foundUid = c.key;
+                    }
                 });
             }
 
@@ -114,16 +139,17 @@ app.all('/api/backend', async (req, res) => {
             const isMatch = await bcrypt.compare(password, foundUser.passwordHash);
             if (!isMatch) return res.status(401).json({ success: false, error: "Invalid credentials" });
 
-            const token = jwt.sign({ uid: foundUser.uid, walletNumber: foundUser.walletNumber }, JWT_SECRET, { expiresIn: '24h' });
+            // Update IP Address in DB on login
+            await update(ref(db, `users/${foundUid}`), { ipAddress: clientIp });
+
+            const token = jwt.sign({ uid: foundUser.uid, walletNumber: foundUser.walletNumber }, JWT_SECRET, { expiresIn: '365d' });
             res.cookie('token', token, { httpOnly: true, secure: true });
             
             delete foundUser.passwordHash; delete foundUser.pinHash;
             return res.json({ success: true, token, user: foundUser });
         }
 
-        // ---------------------------------------------------------
-        // 3. GET USER DETAILS
-        // ---------------------------------------------------------
+        // --- GET USER DETAILS ---
         else if (action === 'me' && req.method === 'GET') {
             authenticate(async () => {
                 const snapshot = await get(ref(db, `users/${req.user.uid}`));
@@ -134,9 +160,7 @@ app.all('/api/backend', async (req, res) => {
             });
         }
 
-        // ---------------------------------------------------------
-        // 4. ADD FUND VIA BOT API (Uses Admin Password from Vercel)
-        // ---------------------------------------------------------
+        // --- ADD FUND ---
         else if (action === 'addfund' && req.method === 'GET') {
             const { wallet, amount, key } = req.query;
             const parsedAmount = parseFloat(amount);
@@ -146,7 +170,6 @@ app.all('/api/backend', async (req, res) => {
             }
 
             const envAdminPassword = process.env.ADMIN_API_PASSWORD;
-
             if (!envAdminPassword || key !== envAdminPassword) {
                 return res.status(401).json({ success: false, error: "Unauthorized: Invalid Admin API Password" });
             }
@@ -167,15 +190,15 @@ app.all('/api/backend', async (req, res) => {
             const txId = generateId(12);
             const updates = {};
             updates[`users/${targetUid}/balance`] = (targetUser.balance || 0) + parsedAmount;
-            updates[`users/${targetUid}/transactions/${txId}`] = { type: 'credit', amount: parsedAmount, comment: 'Fund Added by Admin', time: Date.now(), status: 'completed' };
+            
+            // FIX: Comment changed from "Fund Added by Admin" to "Add Fund"
+            updates[`users/${targetUid}/transactions/${txId}`] = { type: 'credit', amount: parsedAmount, comment: 'Add Fund', time: Date.now(), status: 'completed' };
 
             await update(ref(db), updates);
             return res.json({ success: true, message: "Fund added successfully" });
         }
 
-        // ---------------------------------------------------------
-        // 5. SEND MONEY
-        // ---------------------------------------------------------
+        // --- SEND MONEY ---
         else if (action === 'send' && req.method === 'POST') {
             authenticate(async () => {
                 const { receiverWallet, amount, comment, pin } = req.body;
@@ -215,9 +238,7 @@ app.all('/api/backend', async (req, res) => {
             });
         }
 
-        // ---------------------------------------------------------
-        // 6. REGENERATE KEY
-        // ---------------------------------------------------------
+        // --- REGENERATE KEY ---
         else if (action === 'regenerate' && req.method === 'POST') {
             authenticate(async () => {
                 const newKey = generateId(10);
