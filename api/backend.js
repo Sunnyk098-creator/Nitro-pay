@@ -4,8 +4,12 @@ require('firebase/compat/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const router = express.Router();
+// Create the Express App directly for Vercel
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCo0XK4yHcpXncm9cmkJymL_3rffivHFok",
   authDomain: "nitro-pay-b9f4b.firebaseapp.com",
@@ -16,17 +20,17 @@ const firebaseConfig = {
   appId: "1:32865559465:web:608cb539232769b603dab8"
 };
 
-// Initialize Firebase using the provided configuration
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-
 const db = firebase.database();
 
+// Default Secrets
 const JWT_SECRET = process.env.JWT_SECRET || 'nitro_wallet_jwt_super_secret_key';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'nitro_admin_secret_123';
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS) || 10;
 
+// Auth Middleware
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ success: false, error: 'Unauthorized access' });
@@ -41,7 +45,8 @@ const verifyToken = (req, res, next) => {
 const generateWalletNumber = () => Math.floor(1000000000 + Math.random() * 9000000000).toString();
 const generatePaymentKey = () => Math.random().toString(36).substring(2, 12).toUpperCase();
 
-router.post('/signup', async (req, res) => {
+// Route Paths (Matching both Vercel default rewrite and standard Express)
+app.post(['/api/backend/signup', '/signup'], async (req, res) => {
     try {
         const { name, email, phone, telegramId, password, pin } = req.body;
         if (!name || !email || !phone || !telegramId || !password || !pin) {
@@ -76,7 +81,7 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+app.post(['/api/backend/login', '/login'], async (req, res) => {
     try {
         const { identifier, password } = req.body;
         const snapshot = await db.ref('users').once('value');
@@ -113,7 +118,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/history', verifyToken, async (req, res) => {
+app.get(['/api/backend/history', '/history'], verifyToken, async (req, res) => {
     try {
         const snapshot = await db.ref(`users/${req.user.uid}/transactions`).once('value');
         res.json({ success: true, transactions: snapshot.val() || {} });
@@ -122,7 +127,7 @@ router.get('/history', verifyToken, async (req, res) => {
     }
 });
 
-router.post('/send', verifyToken, async (req, res) => {
+app.post(['/api/backend/send', '/send'], verifyToken, async (req, res) => {
     try {
         const { receiverWallet, amount, pin, comment } = req.body;
         const amt = parseFloat(amount);
@@ -173,7 +178,7 @@ router.post('/send', verifyToken, async (req, res) => {
     }
 });
 
-router.post('/paymentkey', verifyToken, async (req, res) => {
+app.post(['/api/backend/paymentkey', '/paymentkey'], verifyToken, async (req, res) => {
     try {
         const newKey = generatePaymentKey();
         await db.ref(`users/${req.user.uid}`).update({ paymentKey: newKey });
@@ -183,7 +188,7 @@ router.post('/paymentkey', verifyToken, async (req, res) => {
     }
 });
 
-router.get('/addfund', async (req, res) => {
+app.get(['/api/backend/addfund', '/addfund'], async (req, res) => {
     try {
         const { wallet, amount, key } = req.query;
         if (!wallet || !amount || !key) return res.status(400).json({ success: false, error: 'Missing parameters' });
@@ -220,4 +225,5 @@ router.get('/addfund', async (req, res) => {
     }
 });
 
-module.exports = router;
+// IMPORTANT for Vercel
+module.exports = app;
