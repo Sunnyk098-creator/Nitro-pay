@@ -54,14 +54,12 @@
         h1, h2, h3 { color: var(--text-dark); }
         .text-primary { color: var(--primary); }
         
-        /* Forms & Inputs */
         input { 
             width: 100%; padding: 18px; margin-bottom: 16px; border-radius: 16px;
             border: 1px solid rgba(30, 201, 113, 0.15); background: rgba(255,255,255,0.7);
             outline: none; transition: all 0.3s ease; font-size: 15px; color: var(--text-dark); font-weight: 500;
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(30, 201, 113, 0.1); background: #fff; }
-        input::placeholder { color: #9ca3af; font-weight: 400; }
         
         .btn {
             width: 100%; padding: 18px; border: none; border-radius: 16px;
@@ -71,22 +69,12 @@
             box-shadow: 0 8px 20px var(--glow);
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(30, 201, 113, 0.35); }
-        .btn:active { transform: scale(0.97); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); box-shadow: none; }
-        .btn-outline:hover { background: var(--primary); color: white; }
-
-        /* Dashboard Header */
+        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-top: 5px; }
         .header-text p { font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
         .header-text h3 { font-size: 24px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; }
-        .logout-btn { 
-            width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; 
-            border-radius: 16px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.03); color: #ff4b4b; cursor: pointer; transition: all 0.3s ease; font-size: 18px;
-        }
-        .logout-btn:active { transform: scale(0.9); }
 
-        /* Premium Balance Card */
         .balance-card { 
             padding: 35px 25px; text-align: center; color: white; 
             background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
@@ -103,19 +91,18 @@
         
         .balance-card p { opacity: 0.9; font-size: 14px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; margin-top: 15px; }
         .balance-card h2 { color: white; font-size: 48px; margin: 5px 0; font-weight: 700; letter-spacing: -1px; }
+        .hold-balance { font-size: 14px; opacity: 0.8; font-weight: 500; margin-bottom: 10px; }
         
         .wallet-pill {
-            display: inline-flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; 
+            display: inline-flex; justify-content: center; align-items: center; gap: 10px; margin-top: 5px; 
             background: rgba(0,0,0,0.12); padding: 8px 18px; border-radius: 30px; backdrop-filter: blur(5px); transition: 0.3s;
         }
         .wallet-pill span { font-size: 14px; font-family: monospace; letter-spacing: 1.5px; font-weight: 500; }
-        .wallet-pill:active { transform: scale(0.95); }
 
-        /* Quick Actions */
         .action-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 35px; }
         .action-btn { 
             background: rgba(255, 255, 255, 0.6); padding: 16px 5px; border-radius: 20px; 
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 13px; font-weight: 600; 
+            cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600; 
             border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 8px 20px rgba(0,0,0,0.02); 
             color: var(--text-dark); display: flex; flex-direction: column; align-items: center; gap: 12px;
         }
@@ -124,19 +111,13 @@
             display: flex; align-items: center; justify-content: center; font-size: 20px; 
             color: var(--primary); box-shadow: 0 6px 15px rgba(30, 201, 113, 0.12); transition: 0.3s;
         }
-        .action-btn:hover { background: #fff; box-shadow: 0 12px 25px rgba(0,0,0,0.05); transform: translateY(-4px); }
-        .action-btn:hover .action-icon { transform: scale(1.1); box-shadow: 0 8px 20px rgba(30, 201, 113, 0.2); }
-        .action-btn:active { transform: scale(0.94); }
 
-        /* Transactions */
-        .section-title { margin-bottom: 18px; font-size: 18px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.3px; }
+        .section-title { margin-bottom: 18px; font-size: 18px; font-weight: 700; color: var(--text-dark); }
         .transaction-list { display: flex; flex-direction: column; gap: 14px; padding-bottom: 20px; }
         .tx-item { 
             display: flex; justify-content: space-between; align-items: center; padding: 18px; 
             border-radius: 20px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.02); transition: all 0.3s ease; 
         }
-        .tx-item:active { transform: scale(0.97); }
         .tx-left { display: flex; align-items: center; gap: 15px; }
         .tx-icon { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .tx-credit .tx-icon { background: rgba(30, 201, 113, 0.12); color: var(--primary); }
@@ -147,30 +128,31 @@
         .tx-amount.credit { color: var(--primary); }
         .tx-amount.debit { color: #ff4b4b; }
 
-        /* Utilities */
-        .copy-btn { cursor: pointer; color: #fff; padding: 4px; transition: 0.3s; font-size: 14px; opacity: 0.8; }
-        .copy-btn:hover { opacity: 1; transform: scale(1.1); }
-        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 500; opacity: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .copy-btn { cursor: pointer; color: #fff; padding: 4px; font-size: 14px; opacity: 0.8; }
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 500; opacity: 0; transition: 0.4s ease; pointer-events: none; z-index: 1000; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(-15px); }
-        
         .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 22px; height: 22px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .back-btn { margin-bottom: 25px; cursor: pointer; color: var(--text-dark); display: inline-flex; align-items: center; gap: 10px; font-weight: 600; padding: 12px 20px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9); border-radius: 16px; width: fit-content; box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: 0.3s; }
-        .back-btn:active { transform: scale(0.95); }
-        .api-url-box { background: rgba(31, 41, 55, 0.95); color: var(--primary); padding: 18px; border-radius: 16px; font-family: monospace; font-size: 12px; word-break: break-all; margin: 20px 0; text-align: left; line-height: 1.6; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1); }
+        .back-btn { margin-bottom: 25px; cursor: pointer; color: var(--text-dark); display: inline-flex; align-items: center; gap: 10px; font-weight: 600; padding: 12px 20px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9); border-radius: 16px; width: fit-content; }
+        .api-url-box { background: rgba(31, 41, 55, 0.95); color: var(--primary); padding: 18px; border-radius: 16px; font-family: monospace; font-size: 12px; word-break: break-all; margin: 20px 0; text-align: left; line-height: 1.6; }
+        
+        /* Initial Full Page Loader */
+        #page-loader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .big-spinner { border: 4px solid rgba(30, 201, 113, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     </style>
 </head>
 <body>
 
+    <div id="page-loader"><div class="big-spinner"></div></div>
+
     <div class="container">
         
         <!-- LOGIN VIEW -->
-        <div id="login-view" class="view active">
+        <div id="login-view" class="view">
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; min-height: 80vh;">
                 <div class="glass" style="padding: 40px 25px;">
                     <div style="text-align: center; margin-bottom: 35px;">
-                        <div class="floating pulse-glow" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 24px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 15px 30px var(--glow);">
+                        <div class="floating pulse-glow" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 24px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                             <i class="fa-solid fa-wallet" style="font-size: 38px; color: white;"></i>
                         </div>
                         <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nitro Pay</h2>
@@ -196,7 +178,7 @@
             <div style="padding-top: 20px;">
                 <div class="glass" style="padding: 40px 25px;">
                     <div style="text-align: center; margin-bottom: 30px;">
-                        <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Create Account</h2>
+                        <h2 style="font-size: 28px; font-weight: 700;">Create Account</h2>
                         <p style="color: var(--text-muted); font-size: 15px; margin-top: 5px; font-weight: 500;">Join the future of fintech</p>
                     </div>
                     <form id="signup-form">
@@ -225,15 +207,16 @@
                     <p>Hello,</p>
                     <h3 id="dash-name">Loading...</h3>
                 </div>
-                <div class="logout-btn" onclick="logout()">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </div>
+                <!-- LOGOUT BUTTON HAS BEEN REMOVED ENTIRELY -->
             </div>
 
             <div class="balance-card floating pulse-glow shine">
                 <div class="live-badge"><div class="live-dot"></div> LIVE SECURE</div>
                 <p>Available Balance</p>
                 <h2 id="dash-balance">₹0.00</h2>
+                <!-- NEW HOLD BALANCE UI -->
+                <div class="hold-balance" id="dash-hold-balance">Hold Balance: ₹0.00</div>
+                
                 <div class="wallet-pill">
                     <span id="dash-wallet">W----------</span>
                     <i class="fa-solid fa-copy copy-btn" onclick="copyToClipboard(document.getElementById('dash-wallet').innerText)"></i>
@@ -241,7 +224,6 @@
             </div>
 
             <div class="action-row">
-                <!-- Add Fund redirects directly to Telegram per instruction -->
                 <div class="action-btn" onclick="window.open('https://t.me/Nitro_Pay_r0Bot', '_blank')">
                     <div class="action-icon"><i class="fa-solid fa-circle-plus"></i></div>
                     Add Fund
@@ -266,34 +248,12 @@
             </div>
         </div>
 
-        <!-- ADD FUND VIEW (Kept in HTML to show API details) -->
-        <div id="add-fund-view" class="view">
-            <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
-            <div class="glass" style="padding: 40px 25px; text-align: center;">
-                <i class="fa-brands fa-telegram text-primary floating" style="font-size: 60px; margin-bottom: 25px;"></i>
-                <h3 style="font-size: 24px; font-weight: 700;">Add Funds via Bot</h3>
-                <p style="font-size: 14px; color: var(--text-muted); margin: 15px 0; font-weight: 500; line-height: 1.6;">Use the Telegram bot to add funds. Bot Admin Webhook URL (Requires Admin API Password):</p>
-                
-                <div class="api-url-box">
-                    <span id="webhook-url-display">https://your-domain.vercel.app/api/backend?action=addfund&wallet={user_phone}&amount={amount}&key={admin_password}</span>
-                </div>
-                
-                <button class="btn" onclick="copyToClipboard(document.getElementById('webhook-url-display').innerText)" style="margin-bottom: 15px;">
-                    <i class="fa-solid fa-copy"></i> Copy API Link
-                </button>
-                <button class="btn btn-outline" onclick="window.open('https://t.me/Nitro_Pay_r0Bot', '_blank')">
-                    <i class="fa-brands fa-telegram"></i> Open Telegram Bot
-                </button>
-            </div>
-        </div>
-
         <!-- SEND MONEY VIEW -->
         <div id="send-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
             <div class="glass" style="padding: 40px 25px;">
                 <h3 style="margin-bottom: 25px; font-size: 24px; font-weight: 700; text-align: center;">Send Money</h3>
                 <form id="send-form">
-                    <!-- Updated placeholder -->
                     <input type="text" id="send-wallet" placeholder="Receiver Phone Number (Wallet ID)" required>
                     <input type="number" id="send-amount" placeholder="Amount (₹)" step="0.01" required>
                     <input type="text" id="send-comment" placeholder="Comment / Note (Optional)">
@@ -316,9 +276,9 @@
                 <h3 style="font-size: 24px; font-weight: 700;">API Payment Key</h3>
                 <p style="font-size: 14px; color: var(--text-muted); margin: 15px 0 30px; font-weight: 500; line-height: 1.6;">Keep this secret. It is used as the password parameter for bot integrations.</p>
                 
-                <div style="background: rgba(255,255,255,0.8); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 2px dashed rgba(30, 201, 113, 0.3); display: flex; justify-content: center; align-items: center; gap: 15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
+                <div style="background: rgba(255,255,255,0.8); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 2px dashed rgba(30, 201, 113, 0.3); display: flex; justify-content: center; align-items: center; gap: 15px;">
                     <h2 id="pk-display" style="letter-spacing: 4px; font-family: monospace; font-size: 26px; color: var(--text-dark); margin: 0;">----------</h2>
-                    <div style="background: var(--primary); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px var(--glow);" onclick="copyToClipboard(document.getElementById('pk-display').innerText)">
+                    <div style="background: var(--primary); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="copyToClipboard(document.getElementById('pk-display').innerText)">
                         <i class="fa-solid fa-copy" style="color: white; font-size: 14px;"></i>
                     </div>
                 </div>
@@ -348,15 +308,10 @@
         const API_BASE = '/api/backend';
         let currentUser = null;
 
-        // UI Utils
         function switchView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             if(viewId === 'dashboard-view') fetchUserData();
-            if(viewId === 'add-fund-view') {
-                const url = window.location.origin + '/api/backend?action=addfund&wallet={user_phone}&amount={amount}&key={admin_password}';
-                document.getElementById('webhook-url-display').innerText = url;
-            }
         }
 
         function showToast(msg) {
@@ -377,7 +332,6 @@
             else { loader.style.display = 'none'; text.style.display = 'block'; }
         }
 
-        // Secure Fetch Wrapper
         async function apiFetch(action, options = {}) {
             const token = localStorage.getItem('nitro_token');
             const headers = { 'Content-Type': 'application/json', ...options.headers };
@@ -386,22 +340,41 @@
             const res = await fetch(`${API_BASE}?action=${action}`, { ...options, headers });
             
             let data;
-            try {
-                data = await res.json();
-            } catch (err) {
-                throw new Error("Server communication error. Please try again.");
-            }
+            try { data = await res.json(); } catch (err) { throw new Error("Server error."); }
             
             if (res.status === 401 || res.status === 403) {
-                localStorage.removeItem('nitro_token');
-                switchView('login-view');
-                throw new Error(data.error || "Session expired");
+                // Ignore errors for IP check, but alert for normal requests
+                if(action !== 'autologin') {
+                    throw new Error(data.error || "Session expired");
+                }
             }
-            if (!data.success) throw new Error(data.error || "An error occurred");
+            if (!data.success && action !== 'autologin') throw new Error(data.error || "An error occurred");
             return data;
         }
 
-        // Logic
+        // --- IP AUTO-LOGIN LOGIC ON STARTUP ---
+        window.onload = async () => {
+            const loader = document.getElementById('page-loader');
+            try {
+                // Try to login via IP automatically (even if LocalStorage is empty)
+                const data = await apiFetch('autologin', { method: 'GET' });
+                if(data && data.success) {
+                    localStorage.setItem('nitro_token', data.token); // Restore token
+                    switchView('dashboard-view');
+                } else {
+                    switchView('login-view');
+                }
+            } catch(e) {
+                // If IP not found, check LocalStorage as fallback
+                if(localStorage.getItem('nitro_token')) {
+                    switchView('dashboard-view');
+                } else {
+                    switchView('login-view');
+                }
+            }
+            loader.style.display = 'none';
+        };
+
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             toggleLoader('login-loader', true);
@@ -437,9 +410,9 @@
                         pin: document.getElementById('reg-pin').value
                     })
                 });
-                alert('Account created successfully! Please log in.');
+                alert('Account created successfully! Auto-login will verify your IP.');
                 document.getElementById('signup-form').reset();
-                switchView('login-view');
+                window.location.reload(); // Reload triggers IP Auto-login
             } catch (err) {
                 alert(err.message);
             }
@@ -451,8 +424,12 @@
                 const data = await apiFetch('me', { method: 'GET' });
                 currentUser = data.user;
                 document.getElementById('dash-name').innerText = currentUser.name;
-                document.getElementById('dash-balance').innerText = `₹${parseFloat(currentUser.balance).toFixed(2)}`;
-                document.getElementById('dash-wallet').innerText = currentUser.walletNumber;
+                document.getElementById('dash-balance').innerText = `₹${parseFloat(currentUser.balance || 0).toFixed(2)}`;
+                
+                // SHOW HOLD BALANCE
+                document.getElementById('dash-hold-balance').innerText = `Hold Balance: ₹${parseFloat(currentUser.holdBalance || 0).toFixed(2)}`;
+                
+                document.getElementById('dash-wallet').innerText = currentUser.phone;
                 document.getElementById('pk-display').innerText = currentUser.paymentKey;
 
                 // Render Transactions
@@ -477,7 +454,7 @@
                     });
                 }
             } catch (err) {
-                console.error(err);
+                // If token invalid, attempt to recover via IP before showing login
             }
         }
 
@@ -515,18 +492,6 @@
             }
             toggleLoader('regen-loader', false);
         }
-
-        function logout() {
-            localStorage.removeItem('nitro_token');
-            switchView('login-view');
-        }
-
-        // Init App Check
-        window.onload = () => {
-            if(localStorage.getItem('nitro_token')) {
-                switchView('dashboard-view');
-            }
-        };
     </script>
 </body>
 </html>
