@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Digital Wallet</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#19c37d;--secondary:#39d98a;--bg:#effff5;--card:rgba(255,255,255,0.25);--glow:rgba(25,195,125,0.35);--text:#2c3e50;--danger:#ff4757;--success:#2ed573}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background-color:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;align-items:center;background-image:radial-gradient(circle at top right,rgba(57,217,138,0.1),transparent 40%),radial-gradient(circle at bottom left,rgba(25,195,125,0.1),transparent 40%);overflow-x:hidden}
+.app-container{width:100%;max-width:480px;min-height:100vh;padding:20px;position:relative;display:flex;flex-direction:column}
+@media(min-width:481px){.app-container{min-height:auto;height:90vh;border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.05);background:rgba(255,255,255,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.5);margin:20px 0;overflow-y:auto}}
+.view{display:none;width:100%;animation:fadeIn 0.4s ease}
+.active-view{display:flex;flex-direction:column;flex:1}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.glass-card{background:var(--card);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.5);border-radius:20px;padding:25px;box-shadow:0 8px 32px rgba(0,0,0,0.05)}
+.title{font-size:28px;font-weight:700;color:var(--primary);margin-bottom:20px;text-align:center;text-shadow:0 2px 10px var(--glow)}
+.form-group{margin-bottom:15px;position:relative}
+.form-group i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--primary)}
+.form-control{width:100%;padding:14px 14px 14px 45px;border:1px solid rgba(25,195,125,0.2);border-radius:12px;background:rgba(255,255,255,0.6);font-size:14px;color:var(--text);transition:all 0.3s}
+.form-control:focus{outline:none;border-color:var(--primary);box-shadow:0 0 15px var(--glow);background:#fff}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px var(--glow);transition:all 0.3s;display:flex;justify-content:center;align-items:center;gap:10px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--glow)}
+.btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
+.link-btn{background:none;border:none;color:var(--primary);font-weight:500;cursor:pointer;margin-top:15px;box-shadow:none;text-align:center;width:100%}
+.loader{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Dashboard */
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.user-info p{font-size:12px;color:#666}
+.user-info h2{font-size:18px;font-weight:600}
+.icon-btn{background:var(--card);border:1px solid rgba(255,255,255,0.5);width:40px;height:40px;border-radius:50%;display:flex;justify-content:center;align-items:center;color:var(--primary);cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.05);transition:0.3s}
+.icon-btn:hover{background:#fff;transform:scale(1.05)}
+.balance-card{position:relative;overflow:hidden;padding:30px 25px;margin-bottom:25px;background:linear-gradient(135deg,rgba(25,195,125,0.9),rgba(57,217,138,0.9));color:#fff;border-radius:24px;box-shadow:0 10px 25px var(--glow)}
+.balance-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0) 100%);transform:rotate(30deg);animation:shine 4s infinite}
+@keyframes shine{0%{transform:translateX(-100%) rotate(30deg)}100%{transform:translateX(100%) rotate(30deg)}}
+.bal-label{font-size:14px;opacity:0.9;display:flex;justify-content:space-between}
+.live-badge{background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:10px;font-size:10px;display:flex;align-items:center;gap:5px}
+.live-badge i{color:#fff;font-size:8px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
+.bal-amount{font-size:36px;font-weight:700;margin:10px 0;letter-spacing:1px}
+.wallet-id{font-size:12px;opacity:0.8;background:rgba(0,0,0,0.1);padding:5px 10px;border-radius:8px;display:inline-block}
+.action-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:25px}
+.action-btn{display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:none;cursor:pointer}
+.action-icon{width:50px;height:50px;background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.6);border-radius:16px;display:flex;justify-content:center;align-items:center;color:var(--primary);font-size:20px;box-shadow:0 4px 15px rgba(0,0,0,0.05);transition:all 0.3s;position:relative}
+.action-btn:hover .action-icon{background:var(--primary);color:#fff;transform:translateY(-3px);box-shadow:0 8px 20px var(--glow)}
+.action-btn span{font-size:11px;font-weight:500;color:var(--text)}
+.tx-section h3{font-size:16px;margin-bottom:15px;color:var(--text)}
+.tx-list{display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
+.tx-card{display:flex;align-items:center;justify-content:space-between;padding:15px;background:var(--card);border:1px solid rgba(255,255,255,0.4);border-radius:16px;transition:0.3s;animation:slideUp 0.3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tx-info{display:flex;align-items:center;gap:12px}
+.tx-icon{width:40px;height:40px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:16px}
+.credit .tx-icon{background:rgba(46,213,115,0.1);color:var(--success)}
+.debit .tx-icon{background:rgba(255,71,87,0.1);color:var(--danger)}
+.tx-details h4{font-size:14px;font-weight:600}
+.tx-details p{font-size:11px;color:#777;margin-top:2px}
+.tx-amount{font-weight:600;font-size:14px}
+.credit .tx-amount{color:var(--success)}
+.debit .tx-amount{color:var(--danger)}
+/* Modals */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:100}
+.modal{width:90%;max-width:380px;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.5);border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,0,0,0.1);position:relative;animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+.close-modal{position:absolute;top:15px;right:15px;background:none;border:none;font-size:20px;color:#888;cursor:pointer}
+.modal h3{text-align:center;margin-bottom:20px;color:var(--primary)}
+.msg{font-size:13px;text-align:center;margin-top:10px;padding:10px;border-radius:8px;display:none}
+.msg.error{background:rgba(255,71,87,0.1);color:var(--danger)}
+.msg.success{background:rgba(46,213,115,0.1);color:var(--success)}
+.key-box{background:rgba(0,0,0,0.05);padding:15px;border-radius:12px;text-align:center;font-size:22px;font-family:monospace;letter-spacing:2px;font-weight:bold;margin:15px 0;color:var(--text)}
+.pin-inputs{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
+.pin-box{width:45px;height:50px;border:1px solid var(--primary);border-radius:12px;font-size:24px;text-align:center;background:rgba(255,255,255,0.5);font-weight:bold;color:var(--primary)}
+.pin-box:focus{outline:none;box-shadow:0 0 10px var(--glow);background:#fff}
+</style>
+</head>
+<body>
+<div class="app-container">
+    
+    <!-- Login View -->
+    <div id="login-view" class="view active-view">
+        <div class="glass-card" style="margin:auto">
+            <h1 class="title"><i class="fa-solid fa-wallet"></i> Digital Wallet</h1>
+            <div id="login-msg" class="msg"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="log-id" class="form-control" placeholder="Email or Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="log-pass" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn" id="log-btn">
+                    <span>Login</span><div class="loader"></div>
+                </button>
+            </form>
+            <button class="link-btn" onclick="switchView('signup-view')">Create an account</button>
+        </div>
+    </div>
+
+    <!-- Signup View -->
+    <div id="signup-view" class="view">
+        <div class="glass-card" style="margin:auto">
+            <h1 class="title">Create Wallet</h1>
+            <div id="reg-msg" class="msg"></div>
+            <form id="signup-form">
+                <div class="form-group">
+                    <i class="fa-solid fa-signature"></i>
+                    <input type="text" id="reg-name" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="reg-email" class="form-control" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="text" id="reg-phone" class="form-control" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-brands fa-telegram"></i>
+                    <input type="text" id="reg-tg" class="form-control" placeholder="Telegram User ID" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="reg-pass" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" id="reg-pin" class="form-control" placeholder="4-Digit PIN" maxlength="4" pattern="\d{4}" required>
+                </div>
+                <button type="submit" class="btn" id="reg-btn">
+                    <span>Sign Up</span><div class="loader"></div>
+                </button>
+            </form>
+            <button class="link-btn" onclick="switchView('login-view')">Already have an account?</button>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dash-view" class="view">
+        <div class="top-bar">
+            <div class="user-info">
+                <p>Welcome back,</p>
+                <h2 id="d-name">User</h2>
+            </div>
+            <button class="icon-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+
+        <div class="balance-card">
+            <div class="bal-label">Current Balance <span class="live-badge"><i class="fa-solid fa-circle"></i> LIVE</span></div>
+            <div class="bal-amount">$<span id="d-bal">0.00</span></div>
+            <div class="wallet-id">Wallet ID: <span id="d-wallet">------</span></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn" onclick="addFund()">
+                <div class="action-icon"><i class="fa-solid fa-plus"></i></div>
+                <span>Add Fund</span>
+            </button>
+            <button class="action-btn" onclick="openModal('send-modal')">
+                <div class="action-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <span>Send</span>
+            </button>
+            <button class="action-btn" onclick="showPaymentKey()">
+                <div class="action-icon"><i class="fa-solid fa-key"></i></div>
+                <span>Key</span>
+            </button>
+            <button class="action-btn" onclick="openModal('withdraw-modal')">
+                <div class="action-icon"><i class="fa-solid fa-building-columns"></i></div>
+                <span>Withdraw</span>
+            </button>
+        </div>
+
+        <div class="tx-section">
+            <h3>Recent Transactions <button onclick="loadTx()" style="float:right;background:none;border:none;color:var(--primary);cursor:pointer"><i class="fa-solid fa-rotate-right"></i></button></h3>
+            <div class="tx-list" id="tx-list">
+                <!-- Transactions injected here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="send-modal">
+    <div class="modal">
+        <button class="close-modal" onclick="closeModals()"><i class="fa-solid fa-times"></i></button>
+        <h3>Send Money</h3>
+        <div id="send-msg" class="msg"></div>
+        <form id="send-form">
+            <div class="form-group">
+                <i class="fa-solid fa-wallet"></i>
+                <input type="text" id="s-wallet" class="form-control" placeholder="Receiver Wallet ID" required>
+            </div>
+            <div class="form-group">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <input type="number" id="s-amount" class="form-control" placeholder="Amount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <i class="fa-solid fa-comment"></i>
+                <input type="text" id="s-comment" class="form-control" placeholder="Comment (Optional)">
+            </div>
+            <button type="button" class="btn" onclick="openPinModal()">Continue</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="pin-modal">
+    <div class="modal">
+        <button class="close-modal" onclick="closeModals()"><i class="fa-solid fa-times"></i></button>
+        <h3>Enter 4-Digit PIN</h3>
+        <div id="pin-msg" class="msg"></div>
+        <div class="pin-inputs">
+            <input type="password" class="pin-box" maxlength="1" onkeyup="movePin(this, 1)">
+            <input type="password" class="pin-box" maxlength="1" onkeyup="movePin(this, 2)">
+            <input type="password" class="pin-box" maxlength="1" onkeyup="movePin(this, 3)">
+            <input type="password" class="pin-box" maxlength="1" onkeyup="submitSend()">
+        </div>
+        <button class="btn" id="confirm-send-btn" onclick="submitSend()">
+            <span>Confirm Transfer</span><div class="loader"></div>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="key-modal">
+    <div class="modal">
+        <button class="close-modal" onclick="closeModals()"><i class="fa-solid fa-times"></i></button>
+        <h3>Payment Key</h3>
+        <p style="font-size:12px;text-align:center;color:#666">Do not share this key with anyone.</p>
+        <div class="key-box" id="p-key">----------</div>
+        <button class="btn" id="regen-btn" onclick="regenKey()">
+            <span>Regenerate Key</span><div class="loader"></div>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="withdraw-modal">
+    <div class="modal" style="background:linear-gradient(135deg,rgba(25,195,125,0.8),rgba(57,217,138,0.8));color:#fff;border:none">
+        <button class="close-modal" onclick="closeModals()" style="color:#fff"><i class="fa-solid fa-times"></i></button>
+        <div style="text-align:center;padding:20px 0">
+            <i class="fa-solid fa-rocket" style="font-size:40px;margin-bottom:15px;animation:fadeIn 1s infinite alternate"></i>
+            <h2 style="color:#fff">Coming Soon</h2>
+            <p style="font-size:13px;opacity:0.9;margin-top:10px">Withdrawal feature is currently under development.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+/* Frontend Logic - Minified pattern to secure operations */
+(()=>{const e=e=>document.querySelector(e),t=e=>document.querySelectorAll(e);let n=localStorage.getItem("token"),s=JSON.parse(localStorage.getItem("user")||"null");const o=t=>{t.preventDefault();const n=e(t.target.id+" button span"),s=e(t.target.id+" button .loader"),a=e(t.target.id+" button");n.style.display="none",s.style.display="block",a.disabled=!0},a=t=>{const n=e(t+" button span"),s=e(t+" button .loader"),a=e(t+" button");n.style.display="block",s.style.display="none",a.disabled=!1},i=(t,n,s)=>{const o=e(t);o.textContent=n,o.className="msg "+s,o.style.display="block",setTimeout((()=>o.style.display="none"),4e3)};window.switchView=t=>{e(".active-view").classList.remove("active-view"),e("#"+t).classList.add("active-view")},window.logout=()=>{localStorage.removeItem("token"),localStorage.removeItem("user"),location.reload()};const r=()=>{if(n&&s){switchView("dash-view"),e("#d-name").textContent=s.name,e("#d-bal").textContent=parseFloat(s.balance).toFixed(2),e("#d-wallet").textContent=s.walletNumber,loadTx()}else switchView("login-view")};window.loadTx=async()=>{try{const t=await fetch("/api/history",{headers:{Authorization:"Bearer "+n}}),o=await t.json();if(o.success){const t=e("#tx-list");t.innerHTML="";const n=Object.values(o.transactions).sort(((e,t)=>t.time-e.time));if(0===n.length)return void(t.innerHTML="<p style='text-align:center;font-size:12px;color:#888'>No transactions found.</p>");n.forEach((e=>{const n="credit"===e.type,s=new Date(e.time).toLocaleString(),o=n?"From: "+(e.senderWallet||"System"):"To: "+e.receiverWallet;t.innerHTML+=`\n                <div class="tx-card ${e.type}">\n                    <div class="tx-info">\n                        <div class="tx-icon"><i class="fa-solid fa-arrow-${n?"down":"up"}"></i></div>\n                        <div class="tx-details">\n                            <h4>${e.comment||(n?"Received":"Sent")}</h4>\n                            <p>${o} • ${s}</p>\n                        </div>\n                    </div>\n                    <div class="tx-amount">${n?"+":"-"}$${parseFloat(e.amount).toFixed(2)}</div>\n                </div>`}))}}catch(e){}},e("#login-form").addEventListener("submit",(async t=>{o(t);try{const o=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({identifier:e("#log-id").value,password:e("#log-pass").value})}),r=await o.json();r.success?(localStorage.setItem("token",r.token),localStorage.setItem("user",JSON.stringify(r.user)),n=r.token,s=r.user,switchView("dash-view"),init()):i("#login-msg",r.error||"Login failed","error")}catch(t){i("#login-msg","Network error","error")}a("#login-form")})),e("#signup-form").addEventListener("submit",(async t=>{o(t);try{const o=await fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:e("#reg-name").value,email:e("#reg-email").value,phone:e("#reg-phone").value,telegramId:e("#reg-tg").value,password:e("#reg-pass").value,pin:e("#reg-pin").value})}),r=await o.json();r.success?(i("#reg-msg","Account created. Please login.","success"),setTimeout((()=>switchView("login-view")),1500)):i("#reg-msg",r.error||"Signup failed","error")}catch(t){i("#reg-msg","Network error","error")}a("#signup-form")})),window.addFund=()=>window.open("https://t.me/Nitro_Pay_r0Bot","_blank"),window.openModal=t=>{e("#"+t).style.display="flex"},window.closeModals=()=>{t(".modal-overlay").forEach((e=>e.style.display="none")),t(".pin-box").forEach((e=>e.value=""))},window.openPinModal=()=>{const t=e("#s-wallet").value,n=e("#s-amount").value;if(!t||!n||n<=0)return i("#send-msg","Enter valid wallet and amount","error");closeModals(),openModal("pin-modal"),e(".pin-box").focus()},window.movePin=(e,t)=>{e.value.length>=1&&t<=3&&document.querySelectorAll(".pin-box")[t].focus()},window.submitSend=async()=>{const t=Array.from(document.querySelectorAll(".pin-box")).map((e=>e.value)).join("");if(4!==t.length)return i("#pin-msg","Enter 4-digit PIN","error");const o=e("#confirm-send-btn span"),r=e("#confirm-send-btn .loader");o.style.display="none",r.style.display="block",e("#confirm-send-btn").disabled=!0;try{const a=await fetch("/api/send",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+n},body:JSON.stringify({receiverWallet:e("#s-wallet").value,amount:e("#s-amount").value,comment:e("#s-comment").value,pin:t})}),c=await a.json();if(c.success){i("#pin-msg","Transfer Successful!","success"),s.balance-=parseFloat(e("#s-amount").value),localStorage.setItem("user",JSON.stringify(s)),e("#d-bal").textContent=parseFloat(s.balance).toFixed(2),loadTx(),e("#send-form").reset();setTimeout(closeModals,1500)}else i("#pin-msg",c.error||"Transfer failed","error")}catch(t){i("#pin-msg","Network error","error")}o.style.display="block",r.style.display="none",e("#confirm-send-btn").disabled=!1},window.showPaymentKey=()=>{e("#p-key").textContent=s.paymentKey||"Loading...",openModal("key-modal")},window.regenKey=async()=>{const t=e("#regen-btn span"),o=e("#regen-btn .loader");t.style.display="none",o.style.display="block",e("#regen-btn").disabled=!0;try{const t=await fetch("/api/paymentkey",{method:"POST",headers:{Authorization:"Bearer "+n}}),r=await t.json();r.success?(s.paymentKey=r.paymentKey,localStorage.setItem("user",JSON.stringify(s)),e("#p-key").textContent=r.paymentKey):alert("Failed to regenerate")}catch(e){}t.style.display="block",o.style.display="none",e("#regen-btn").disabled=!1};window.init=r;init()})();
+</script>
+</body>
+</html>
