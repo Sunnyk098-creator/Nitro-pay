@@ -266,16 +266,16 @@
             </div>
         </div>
 
-        <!-- ADD FUND VIEW (Kept in HTML to not remove existing sections, but button directly redirects now) -->
+        <!-- ADD FUND VIEW (Kept in HTML to show API details) -->
         <div id="add-fund-view" class="view">
             <div class="back-btn" onclick="switchView('dashboard-view')"><i class="fa-solid fa-arrow-left"></i> Back</div>
             <div class="glass" style="padding: 40px 25px; text-align: center;">
                 <i class="fa-brands fa-telegram text-primary floating" style="font-size: 60px; margin-bottom: 25px;"></i>
                 <h3 style="font-size: 24px; font-weight: 700;">Add Funds via Bot</h3>
-                <p style="font-size: 14px; color: var(--text-muted); margin: 15px 0; font-weight: 500; line-height: 1.6;">Use the Telegram bot to add funds. Set this Webhook URL in your bot:</p>
+                <p style="font-size: 14px; color: var(--text-muted); margin: 15px 0; font-weight: 500; line-height: 1.6;">Use the Telegram bot to add funds. Bot Admin Webhook URL (Requires Admin API Password):</p>
                 
                 <div class="api-url-box">
-                    <span id="webhook-url-display">https://your-domain.vercel.app/api/backend?action=addfund&wallet={wallet}&amount={amount}&key={password}</span>
+                    <span id="webhook-url-display">https://your-domain.vercel.app/api/backend?action=addfund&wallet={user_phone}&amount={amount}&key={admin_password}</span>
                 </div>
                 
                 <button class="btn" onclick="copyToClipboard(document.getElementById('webhook-url-display').innerText)" style="margin-bottom: 15px;">
@@ -293,7 +293,8 @@
             <div class="glass" style="padding: 40px 25px;">
                 <h3 style="margin-bottom: 25px; font-size: 24px; font-weight: 700; text-align: center;">Send Money</h3>
                 <form id="send-form">
-                    <input type="text" id="send-wallet" placeholder="Receiver Wallet ID (e.g. W123ABC)" required>
+                    <!-- Updated placeholder -->
+                    <input type="text" id="send-wallet" placeholder="Receiver Phone Number (Wallet ID)" required>
                     <input type="number" id="send-amount" placeholder="Amount (₹)" step="0.01" required>
                     <input type="text" id="send-comment" placeholder="Comment / Note (Optional)">
                     <input type="password" id="send-pin" placeholder="Enter 4-Digit PIN to Confirm" pattern="\d{4}" maxlength="4" required>
@@ -353,7 +354,7 @@
             document.getElementById(viewId).classList.add('active');
             if(viewId === 'dashboard-view') fetchUserData();
             if(viewId === 'add-fund-view') {
-                const url = window.location.origin + '/api/backend?action=addfund&wallet={walletNumber}&amount={amount}&key={password}';
+                const url = window.location.origin + '/api/backend?action=addfund&wallet={user_phone}&amount={amount}&key={admin_password}';
                 document.getElementById('webhook-url-display').innerText = url;
             }
         }
